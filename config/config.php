@@ -100,7 +100,6 @@ return [
                 // 'example_mutation'  => ExampleMutation::class,
             ],
             'middleware' => [],
-            'method'     => ['get', 'post'],
         ],
     ],
 
