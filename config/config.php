@@ -5,6 +5,17 @@ return [
     // The prefix for routes
     'prefix'                 => 'graphi/api',
 
+    /*
+     * Config for GraphiQL (see (https://github.com/graphql/graphiql).
+     */
+    'graphiql'               => [
+        'prefix'     => '/graphi/graphiql/{graphql_schema?}',
+        'controller' => \Graphicms\GraphQL\Http\Controllers\GraphQLController::class . '@graphiql',
+        'middleware' => ['web', \App\Http\Middleware\Authenticate::class],
+        'view'       => 'graphicms_graphql::graphiql',
+        'display'    => env('ENABLE_GRAPHIQL', true),
+    ],
+
     // The routes to make GraphQL request. Either a string that will apply
     // to both query and mutation or an array containing the key 'query' and/or
     // 'mutation' with the according Route
@@ -154,15 +165,4 @@ return [
      * Reference \Rebing\GraphQL\Support\PaginationType::class
      */
     'pagination_type'        => \Rebing\GraphQL\Support\PaginationType::class,
-
-    /*
-     * Config for GraphiQL (see (https://github.com/graphql/graphiql).
-     */
-    'graphiql'               => [
-        'prefix'     => '/graphi/graphiql/{graphql_schema?}',
-        'controller' => \Graphicms\GraphQL\Http\Controllers\GraphQLController::class . '@graphiql',
-        'middleware' => ['web', \App\Http\Middleware\Authenticate::class],
-        'view'       => 'graphicms_graphql::graphiql',
-        'display'    => env('ENABLE_GRAPHIQL', true),
-    ],
 ];
