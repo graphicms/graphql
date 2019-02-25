@@ -21,7 +21,7 @@ class GraphQLController extends Controller {
 
         if( ! $schema)
         {
-            $schema = config('graphicms_graphql.default_schema');
+            $schema = config('graphicms.graphql.default_schema');
         }
 
         // If a singular query was not found, it means the queries are in batch
@@ -29,7 +29,7 @@ class GraphQLController extends Controller {
         $batch = $isBatch ? $request->all() : [$request->all()];
 
         $completedQueries = [];
-        $paramsKey = config('graphicms_graphql.params_key');
+        $paramsKey = config('graphicms.graphql.params_key');
 
         $opts = [
             'context'   => $this->queryContext(),
@@ -66,13 +66,13 @@ class GraphQLController extends Controller {
 
     public function graphiql(Request $request, $schema = null)
     {
-        $graphqlPath = '/'.config('graphicms_graphql.prefix');
+        $graphqlPath = '/'.config('graphicms.graphql.prefix');
         if ($schema)
         {
             $graphqlPath .= '/' . $schema;
         }
 
-        $view = config('graphicms_graphql.graphiql.view', 'graphicms_graphql::graphiql');
+        $view = config('graphicms.graphql.graphiql.view', 'graphicms.graphql::graphiql');
         return view($view, [
             'graphql_schema' => 'graphql_schema',
             'graphqlPath' => $graphqlPath

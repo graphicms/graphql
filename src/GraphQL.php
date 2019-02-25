@@ -24,7 +24,7 @@ class GraphQL extends \Rebing\GraphQL\GraphQL
 
     public function addNewScheme($name, $config = [])
     {
-        Config::set('graphicms_graphql.schemas.'.$name, $config);
+        Config::set('graphicms.graphql.schemas.'.$name, $config);
         $this->addSchema($name, $config);
     }
 
@@ -120,8 +120,8 @@ class GraphQL extends \Rebing\GraphQL\GraphQL
 
         $schema = $this->schema($schemaName);
 
-        $errorFormatter = config('graphicms_graphql.error_formatter', [static::class, 'formatError']);
-        $errorsHandler = config('graphicms_graphql.errors_handler', [static::class, 'handleErrors']);
+        $errorFormatter = config('graphicms.graphql.error_formatter', [static::class, 'formatError']);
+        $errorsHandler = config('graphicms.graphql.errors_handler', [static::class, 'handleErrors']);
 
         $result = GraphQLBase::executeQuery($schema, $query, null, $context, $params, $operationName)
             ->setErrorsHandler($errorsHandler)
@@ -134,7 +134,7 @@ class GraphQL extends \Rebing\GraphQL\GraphQL
         $name = $customName ?: $typeName . '_pagination';
 
         if (!isset($this->typesInstances[$name])) {
-            $paginationType = config('graphicms_graphql.pagination_type', PaginationType::class);
+            $paginationType = config('graphicms.graphql.pagination_type', PaginationType::class);
             $this->typesInstances[$name] = new $paginationType($typeName, $customName);
         }
 
@@ -174,7 +174,7 @@ class GraphQL extends \Rebing\GraphQL\GraphQL
 
     protected function getSchemaConfiguration($schema)
     {
-        $schemaName = is_string($schema) ? $schema : config('graphicms_graphql.default_schema', 'default');
+        $schemaName = is_string($schema) ? $schema : config('graphicms.graphql.default_schema', 'default');
 
         if (!is_array($schema) && !isset($this->schemas[$schemaName])) {
             throw new SchemaNotFound('Type ' . $schemaName . ' not found.');

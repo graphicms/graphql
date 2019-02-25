@@ -37,7 +37,7 @@ class GraphQLServiceProvider extends ServiceProvider
      */
     protected function bootRouter()
     {
-        if(config('graphicms_graphql.routes'))
+        if(config('graphicms.graphql.routes'))
         {
             include __DIR__.'/Http/routes.php';
         }
@@ -67,7 +67,7 @@ class GraphQLServiceProvider extends ServiceProvider
      */
     protected function bootTypes()
     {
-        $configTypes = config('graphicms_graphql.types');
+        $configTypes = config('graphicms.graphql.types');
         foreach($configTypes as $name => $type)
         {
             if(is_numeric($name))
@@ -88,7 +88,7 @@ class GraphQLServiceProvider extends ServiceProvider
      */
     protected function bootSchemas()
     {
-        $configSchemas = config('graphicms_graphql.schemas');
+        $configSchemas = config('graphicms.graphql.schemas');
         foreach ($configSchemas as $name => $schema) {
             $this->app['graphicms_graphql']->addSchema($name, $schema);
         }
@@ -101,21 +101,21 @@ class GraphQLServiceProvider extends ServiceProvider
      */
     protected function applySecurityRules()
     {
-        $maxQueryComplexity = config('graphicms_graphql.security.query_max_complexity');
+        $maxQueryComplexity = config('graphicms.graphql.security.query_max_complexity');
         if ($maxQueryComplexity !== null) {
             /** @var QueryComplexity $queryComplexity */
             $queryComplexity = DocumentValidator::getRule('QueryComplexity');
             $queryComplexity->setMaxQueryComplexity($maxQueryComplexity);
         }
 
-        $maxQueryDepth = config('graphicms_graphql.security.query_max_depth');
+        $maxQueryDepth = config('graphicms.graphql.security.query_max_depth');
         if ($maxQueryDepth !== null) {
             /** @var QueryDepth $queryDepth */
             $queryDepth = DocumentValidator::getRule('QueryDepth');
             $queryDepth->setMaxQueryDepth($maxQueryDepth);
         }
 
-        $disableIntrospection = config('graphicms_graphql.security.disable_introspection');
+        $disableIntrospection = config('graphicms.graphql.security.disable_introspection');
         if ($disableIntrospection === true) {
             /** @var DisableIntrospection $disableIntrospection */
             $disableIntrospection = DocumentValidator::getRule('DisableIntrospection');
@@ -136,7 +136,7 @@ class GraphQLServiceProvider extends ServiceProvider
     public function registerGraphQL()
     {
         $configPath = __DIR__.'/../config';
-        $this->mergeConfigFrom($configPath.'/config.php', 'graphicms_graphql');
+        $this->mergeConfigFrom($configPath.'/config.php', 'graphicms.graphql');
         $this->app->singleton('graphicms_graphql', function($app)
         {
             $graphql = new GraphQL($app);

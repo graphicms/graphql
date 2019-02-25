@@ -1,12 +1,16 @@
 <?php
-Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGraphQLEventMiddleware::class]], function() {
+
+use Graphicms\GraphQL\Http\Controllers\GraphQLController;
+use Graphicms\GraphQL\Http\Middleware\EmitServingGraphQLEventMiddleware;
+
+Route::group(['middleware' => [EmitServingGraphQLEventMiddleware::class]], function() {
     Route::group(array_merge([
-        'prefix'        => config('graphicms_graphql.prefix'),
-        'middleware'    => config('graphicms_graphql.middleware', []),
-    ], config('graphicms_graphql.route_group_attributes', [])), function($router)
+        'prefix'        => config('graphicms.graphql.prefix'),
+        'middleware'    => config('graphicms.graphql.middleware', []),
+    ], config('graphicms.graphql.route_group_attributes', [])), function($router)
     {
         // Routes
-        $routes = config('graphicms_graphql.routes');
+        $routes = config('graphicms.graphql.routes');
         $queryRoute = null;
         $mutationRoute = null;
         if(is_array($routes))
@@ -21,7 +25,7 @@ Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGra
         }
 
         // Controllers
-        $controllers = config('graphicms_graphql.controllers', \Graphicms\GraphQL\Http\Controllers\GraphQLController::class . '@query');
+        $controllers = config('graphicms.graphql.controllers', GraphQLController::class . '@query');
         $queryController = null;
         $mutationController = null;
         if(is_array($controllers))
@@ -42,14 +46,14 @@ Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGra
         {
             if(preg_match($schemaParameterPattern, $queryRoute))
             {
-                $defaultMiddleware = config('graphicms_graphql.schemas.' . config('graphicms_graphql.default_schema') . '.middleware', []);
-                $defaultMethod = config('graphicms_graphql.schemas.' . config('graphicms_graphql.default_schema') . '.method', ['get', 'post']);
+                $defaultMiddleware = config('graphicms.graphql.schemas.' . config('graphicms.graphql.default_schema') . '.middleware', []);
+                $defaultMethod = config('graphicms.graphql.schemas.' . config('graphicms.graphql.default_schema') . '.method', ['get', 'post']);
                 Route::match($defaultMethod, preg_replace($schemaParameterPattern, '', $queryRoute), [
                     'uses'          => $queryController,
                     'middleware'    => $defaultMiddleware,
                 ]);
 
-                foreach(config('graphicms_graphql.schemas') as $name => $schema)
+                foreach(config('graphicms.graphql.schemas') as $name => $schema)
                 {
                     Route::match(
                         array_get($schema, 'method', ['get', 'post']),
@@ -74,8 +78,8 @@ Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGra
         {
             if(preg_match($schemaParameterPattern, $mutationRoute))
             {
-                $defaultMiddleware = config('graphicms_graphql.schemas.' . config('graphicms_graphql.default_schema') . '.middleware', []);
-                $defaultMethod = config('graphicms_graphql.schemas.' . config('graphicms_graphql.default_schema') . '.method', ['get', 'post']);
+                $defaultMiddleware = config('graphicms.graphql.schemas.' . config('graphicms.graphql.default_schema') . '.middleware', []);
+                $defaultMethod = config('graphicms.graphql.schemas.' . config('graphicms.graphql.default_schema') . '.method', ['get', 'post']);
                 Route::match(
                     $defaultMethod,
                     preg_replace($schemaParameterPattern, '', $mutationRoute),
@@ -85,7 +89,7 @@ Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGra
                     ]
                 );
 
-                foreach(config('graphicms_graphql.schemas') as $name => $schema)
+                foreach(config('graphicms.graphql.schemas') as $name => $schema)
                 {
                     Route::match(
                         array_get($schema, 'method', ['get', 'post']),
@@ -106,16 +110,16 @@ Route::group(['middleware' => [\Graphicms\GraphQL\Http\Middleware\EmitServingGra
         }
     });
 
-    if (config('graphicms_graphql.graphiql.display', true))
+    if (config('graphicms.graphql.graphiql.display', true))
     {
         Route::group([
-            'prefix'        => config('graphicms_graphql.graphiql.prefix', 'graphiql'),
-            'middleware'    => config('graphicms_graphql.graphiql.middleware', [])
+            'prefix'        => config('graphicms.graphql.graphiql.prefix', 'graphiql'),
+            'middleware'    => config('graphicms.graphql.graphiql.middleware', [])
         ], function ($router)
         {
-            $graphiqlController =  config('graphicms_graphql.graphiql.controller', \Graphicms\GraphQL\Http\Controllers\GraphQLController::class . '@graphiql');
+            $graphiqlController =  config('graphicms.graphql.graphiql.controller', GraphQLController::class . '@graphiql');
             $schemaParameterPattern = '/\{\s*graphql\_schema\s*\?\s*\}/';
-            foreach (config('graphicms_graphql.schemas') as $name => $schema)
+            foreach (config('graphicms.graphql.schemas') as $name => $schema)
             {
                 Route::match(
                     ['get', 'post'],
