@@ -6,7 +6,7 @@
         "graphql"
     ],
     "homepage": "https://github.com/graphicms/graphql",
-    "license": "MIT License (MIT)",
+    "license": "MIT",
     "type": "library",
     "authors": [
         {
