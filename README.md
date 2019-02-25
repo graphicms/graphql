@@ -1,11 +1,9 @@
-# Very short description of the package
+# GraphQL for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/graphicms/graphql.svg?style=flat-square)](https://packagist.org/packages/graphicms/graphql)
-[![Build Status](https://img.shields.io/travis/graphicms/graphql/master.svg?style=flat-square)](https://travis-ci.org/graphicms/graphql)
-[![Quality Score](https://img.shields.io/scrutinizer/g/graphicms/graphql.svg?style=flat-square)](https://scrutinizer-ci.com/g/graphicms/graphql)
 [![Total Downloads](https://img.shields.io/packagist/dt/graphicms/graphql.svg?style=flat-square)](https://packagist.org/packages/graphicms/graphql)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+This is the package used by GraphiCMS to serve GraphQL schemas. It is based on [rebing/graphql-laravel](https://github.com/rebing/graphql-laravel) but we had do modify it so meet our needs (a lot of closures support, dynamic queries and mutations and so on). We'll try to keep it in sync with the base package as most as we can.
 
 ## Installation
 
@@ -17,19 +15,21 @@ composer require graphicms/graphql
 
 ## Usage
 
-``` php
-// Usage description here
+The service auto registers using Laravel's auto discovery package. You can publish the config files of the package using
+```php
+php artisan vendor:publish --provider="Graphicms\GraphQL\GraphQLServiceProvider" --tag=config
 ```
 
-### Testing
+By default the package publishes the routes with `graphi/` prefix.  You can change this in the config file changing the keys `prefix` and `graphiql.prefix`.
 
-``` bash
-composer test
-```
+This package also comes bundled with [Graphiql](https://github.com/graphql/graphiql), the browser IDE form GraphQl. You can check it out using http://[yoursite]//graphi/graphiql/{graphql_schema?} (this is also configurable).
 
-### Changelog
+All the functionality from [rebing/graphql-laravel](https://github.com/rebing/graphql-laravel) exists here too, but we also have a few dynamic queries, types and mutations support.
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Documentation will come later.
+
+## Warning
+Though this package can be installed standalone, it is meant to be used alongside [GraphiCMS](https://github.com/graphicms/cms), the api-first CMS for Laravel. THE SOFTWARE IS PROVIDED "AS IS", like the License says.
 
 ## Contributing
 
@@ -41,7 +41,7 @@ If you discover any security related issues, please email filip@pacurar.net inst
 
 ## Credits
 
-- [GraphiCms](https://github.com/graphicms)
+- [Filip Pacurar](https://github.com/filipac)
 - [All Contributors](../../contributors)
 
 ## License
